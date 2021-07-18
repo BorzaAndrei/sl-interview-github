@@ -1,0 +1,82 @@
+{% load static %}
+
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="{% static 'gists/style.css' %}">
+
+    <title>Github Gists</title>
+  </head>
+  <body>
+    <div class="container">
+
+      <h1 class="text-center mt-3">Welcome to Github Gists</h1>
+
+      <h6 class="text-center">Enter a GitHub username in order to get a list of all the Gists of that user!</h6>
+
+      <div class="row mt-3">
+        <form class='col' action="{% url 'search_username' %}" method='post'>
+          {% csrf_token %}
+          <div class="form-group row">
+            {% if username %}
+              <input class="col-form-label col-10" autofocus type="text" name="username" value="{{ username }}">
+            {% else %}
+              <input class="col-form-label col-10" autofocus type="text" name="username" placeholder="Github username">
+            {% endif %}
+            <input class="btn btn-primary col-1 ml-2" type="submit" value="Search">
+          </div>
+        </form>
+      </div>
+
+      {% if username %}
+        <div class="row mt-3">
+          You are searching for {{ username }}
+        </div>
+      {% endif %}
+
+      {% if json_content %}
+        {% for git in json_content %}
+          <a href="">
+            <div class="card mb-3">
+              <div class="card-body">
+                {% if git.description %}
+                  {{ git.description }}
+                {% else %}
+                  {{ git.id }}
+                {% endif %}
+              </div>
+              {% if git.languages %}
+                <div class="card-subtitle ml-3 mb-2 text-muted">
+                  {% for language in git.languages %}
+                    <div class="badge badge-secondary">{{language}}</div>
+                  {% endfor %}
+                </div>
+              {% endif %}
+              {% if git.forks %}
+                <div class="card-subtitle ml-3 mb-2 text-muted">
+                  {% for fork in git.forks %}
+                    <div class="badge badge-secondary">{{fork}}</div>
+                  {% endfor %}
+                </div>
+              {% endif %}
+            </div>
+          </a>
+        {% endfor %}
+      {% endif %}
+      
+    </div>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+  </body>
+</html>
