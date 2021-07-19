@@ -12,7 +12,7 @@ def index(request):
 def search_username(request, pagination_index: int):
     if request.method == 'POST':
         username = request.POST.get('username')
-        r = requests.get(f"https://api.github.com/users/{username}/gists?per_page={settings.GISTS_PER_PAGE}&page={pagination_index}", headers={"Accept": "application/vnd.github.v3+json", "Authorization": "token  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"})
+        r = requests.get(f"https://api.github.com/users/{username}/gists?per_page={settings.GISTS_PER_PAGE}&page={pagination_index}", headers={"Accept": "application/vnd.github.v3+json"})
         content = r.json()
         if r.status_code == 200:
             for gist in content:
@@ -29,7 +29,7 @@ def search_username(request, pagination_index: int):
                 gist["files_content"] = files_content
 
                 # Get owners of forks
-                r_forks = requests.get(gist["forks_url"], headers={"Accept": "application/vnd.github.v3+json", "Authorization": "token  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"})
+                r_forks = requests.get(gist["forks_url"], headers={"Accept": "application/vnd.github.v3+json"})
                 # TODO: Sort for last used
                 forks = []
                 for fork in r_forks.json():
