@@ -72,21 +72,21 @@
 
             {% if git.files_content %}
               <div id="accordion-{{ git.id }}">
-                {% for filename, file_content in git.files_content.items %}
+                {% for filename, file_raw_url in git.files_content.items %}
 
                   <div class="card">
                     <div class="card-header" id="heading-{{ git.id }}-{{ filename }}">
                       <h5 class="mb-0">
-                        <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapse-{{ git.id }}-{{ filename }}" aria-expanded="false" aria-controls="collapse-{{ git.id }}-{{ filename }}">
+                        <button class="btn btn-link collapsed" onclick="fetchAsync('{{ file_raw_url }}', 'collapse-{{ git.id }}-{{ filename }}')" data-toggle="collapse" data-target="#collapse-{{ git.id }}-{{ filename }}" aria-expanded="false" aria-controls="collapse-{{ git.id }}-{{ filename }}">
                         {{ filename|sanitize_names }}
                         </button>
                       </h5>
                     </div>
 
                     <div id="collapse-{{ git.id }}-{{ filename }}" class="collapse" aria-labelled-by="heading-{{ git.id }}-{{ filename }}" data-parent="#accordion-{{ git.id }}">
-                      <div class="card-body">
-                        {{ file_content|linebreaksbr }}
-                      </div>
+                      <pre class="card-body">
+                        
+                      </pre>
                     </div>
 
                   </div>
@@ -126,6 +126,20 @@
       </div>
       {% endif %}
     </div>
+
+    <script>
+      async function fetchAsync (url, textarea_id) {
+        let response = await fetch(url);
+
+        return response.text().then(function(text) {
+          console.log(textarea_id)
+          console.log(document.getElementById(textarea_id))
+          console.log(document.getElementById(textarea_id).firstElementChild.innerHtml)
+          document.getElementById(textarea_id).firstElementChild.innerHTML = text;
+          console.log(document.getElementById(textarea_id).firstElementChild.innerHtml)
+        });
+      }
+    </script>
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
