@@ -5,5 +5,5 @@ from . import views
 
 urlpatterns = [
     path('', views.index, name='index'),
-    path('search_username/', views.search_username, name='search_username')
+    path('search_username/<int:pagination_index>/', views.search_username, name='search_username')
 ]
